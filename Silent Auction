@@ -1,0 +1,34 @@
+# TODO-1: Ask the user for input
+import art
+
+print(art.logo)
+highest_bid = 0
+highest_bidder = ''
+name = input("What is your name?\n")
+price = int(input("What is your bid? \n $"))
+
+# TODO-2: Save data into dictionary {name: price}
+user_bids = {name: price}
+#print(user_bids)
+# TODO-3: Whether if new bids need to be added
+game_over = False
+while game_over is False:
+    other_bidders = input("Are there any other bidders? Type 'yes' or 'no'\n").lower()
+    if other_bidders == 'yes':
+        print("\n"*100)
+        new_name = input("What is your name?\n")
+        new_price = int(input("What is your bid?\n $"))
+        user_bids[new_name] = new_price
+    else:
+        game_over = True
+# TODO-4: Compare bids in dictionary
+        for bid in user_bids:
+            if user_bids[bid] > highest_bid:
+                highest_bid = user_bids[bid]
+                highest_bidder = bid
+            #print(user_bids[bid])
+print(f"The winner is {highest_bidder} with the bid of ${highest_bid}")
+
+
+
+
