@@ -1,0 +1,74 @@
+import art
+import game_data
+import random
+print(art.logo) #print the game logo
+#create function for selecting 2 random names from game_data
+def select(lst):
+    n = random.choice(lst)
+    #name = n['name']
+    return n
+
+# use select function to choose random accounts from the game data
+result1 = select(game_data.data)#saving name and dictionary separately to use dictionary later for comparison
+result2 = select(game_data.data)
+while result1 == result2:
+    result2 = select(game_data.data)
+
+#function for printing the statements after the art logo of the game
+def message():
+    print(f"Compare A: {result1['name']}, a {result1['description']}, from {result1['country']}")
+    print(art.vs)
+    print(f"Compare B: {result2['name']}, a {result2['description']}, from {result2['country']}")
+
+message()
+
+#Ask for user's guess
+guess = input("Who has more followers. Type 'A' or 'B':").upper()
+print('\n' * 50)
+print(art.logo)
+
+#create compare function to compare the followers
+def compare(f1, f2):
+    if f1 > f2:
+         return 'A'
+    else:
+         return 'B'
+
+comp_guess = compare(result1['follower_count'], result2['follower_count'])
+
+#result function to display the scores and the results
+def result():
+    score = 0
+    if guess == comp_guess:
+         score = score + 1
+         return "You're right.", f"Current score {score}", score
+    else:
+        return "Sorry! that's not correct.", f"Final score: {score}", score
+
+print(result()[0],result()[1])
+
+#to replay the game if the answer is correct
+new_score = result()[2]
+game_over = False
+if guess == comp_guess:
+    while game_over is False:
+         result1 = result2
+         result2 = select(game_data.data)
+         while result1 == result2:
+             result2 = select(game_data.data)
+         message()
+         guess = input("Who has more followers. Type 'A' or 'B'.")
+         print('\n' * 50)
+         print(art.logo)
+         #print(compare(result1['follower_count'], result2['follower_count']))
+         comp_guess = compare(result1['follower_count'], result2['follower_count'])
+         if guess == comp_guess:
+             new_score += 1
+             print(result()[0],f"Final score: {new_score}")
+         else:
+             print(result()[0], f"Final score: {new_score}")
+             game_over = True
+    #print(result1, result2)
+
+
+
