@@ -1,0 +1,153 @@
+MENU = {
+    "espresso": {
+        "ingredients": {
+            "water": 50,
+            "coffee": 18,
+        },
+        "cost": 1.5,
+    },
+    "latte": {
+        "ingredients": {
+            "water": 200,
+            "milk": 150,
+            "coffee": 24,
+        },
+        "cost": 2.5,
+    },
+    "cappuccino": {
+        "ingredients": {
+            "water": 250,
+            "milk": 100,
+            "coffee": 24,
+        },
+        "cost": 3.0,
+    }
+}
+
+resources = {
+    "water": 300,
+    "milk": 200,
+    "coffee": 100,
+}
+
+money = 0
+#TODO: 2. Turn off the coffee
+#on_off = input("Turn the machine on.: ").lower()
+on_off = 'on'
+while on_off == 'on':
+    #TODO: 1. Prompt user for input
+    user_input = input("What would you like? (espresso/latte/cappuccino): ").lower()
+
+    #TODO: 3. If user's input is report then print the current resources
+    if user_input == 'report':
+        print(f"Water: {resources['water']}ml")
+        print(f"Milk: {resources['milk']}ml")
+        print(f"Coffee: {resources['coffee']}g")
+        print(f"Money: ${money}")
+
+    elif user_input == 'espresso' or user_input == 'latte' or user_input == 'cappuccino':
+        #TODO: 4. Process coins
+        def process_coins():
+            if user_input != 'report':
+                print("Please insert coins.")
+                quarters = int(input("How many quarters?: "))
+                dimes    = int(input("How many dimes?: "))
+                nickels  = int(input("How many nickels?: "))
+                pennies  = int(input("How many pennies?: "))
+                total = float(round(.25 * quarters + 0.10 * dimes + 0.05 * nickels + 0.01 * pennies,2))
+                return quarters, dimes, nickels, pennies, total
+        gt=process_coins()[4]
+
+        #TODO. 4. Check if we have enough resources for the chosen coffee option
+        def chk_resources(option):
+            if option == 'espresso':
+                if resources["water"] < MENU["espresso"]["ingredients"]["water"]:
+                    enough_resources = 'N'
+                    return "Sorry there is not enough water.", enough_resources
+                elif resources["coffee"] < MENU["espresso"]["ingredients"]["coffee"]:
+                    enough_resources = 'N'
+                    return "Sorry there is not enough coffee.", enough_resources
+                else:
+                    enough_resources = 'Y'
+                    return "Enjoy your espresso ☕️.", enough_resources
+            elif option == 'latte':
+                if resources["water"] < MENU["latte"]["ingredients"]["water"]:
+                    enough_resources = 'N'
+                    return "Sorry there is not enough water.", enough_resources
+                elif resources["milk"] < MENU["latte"]["ingredients"]["milk"]:
+                    enough_resources = 'N'
+                    return "Sorry there is not enough milk.", enough_resources
+                elif resources["coffee"] < MENU["latte"]["ingredients"]["coffee"]:
+                    enough_resources = 'N'
+                    return "Sorry there is not enough coffee.", enough_resources
+                else:
+                    enough_resources = 'Y'
+                    return "Enjoy your latte ☕️.", enough_resources
+            elif option == 'cappuccino':
+                if resources["water"] < MENU["cappuccino"]["ingredients"]["water"]:
+                    enough_resources = 'N'
+                    return "Sorry there is not enough water.", enough_resources
+                elif resources["milk"] < MENU["cappuccino"]["ingredients"]["milk"]:
+                    enough_resources = 'N'
+                    return "Sorry there is not enough milk.", enough_resources
+                elif resources["coffee"] < MENU["cappuccino"]["ingredients"]["coffee"]:
+                    enough_resources = 'N'
+                    return "Sorry there is not enough coffee.", enough_resources
+                else:
+                    enough_resources = 'Y'
+                    return "Enjoy your cappuccino ☕️.", enough_resources
+
+        print(chk_resources(user_input)[0])
+
+#below function should return output only if there are enough resources
+        if chk_resources(user_input)[1] == "Y":
+            def check_transaction(ui, user_amt):
+                 m = 0
+                 if ui == 'espresso' and user_amt > MENU["espresso"]["cost"]:
+                    change = round(gt - MENU["espresso"]["cost"], 2)
+                    m += MENU["espresso"]["cost"]
+                    return m, f"Here is ${change} in change."
+                 elif ui == 'espresso' and user_amt == MENU["espresso"]["cost"]:
+                    m += MENU["espresso"]["cost"]
+                    return m
+                 elif ui == 'espresso' and user_amt < MENU["espresso"]["cost"]:
+                    return m, "Sorry that's not enough money. Money refunded."
+                 elif ui == 'latte' and user_amt > MENU["latte"]["cost"]:
+                     change = round(gt - MENU["latte"]["cost"], 2)
+                     m += MENU["latte"]["cost"]
+                     return m, f"Here is ${change} in change."
+                 elif ui == 'latte' and user_amt == MENU["latte"]["cost"]:
+                     m += MENU["latte"]["cost"]
+                     return m
+                 elif ui == 'latte' and user_amt < MENU["latte"]["cost"]:
+                     return m, "Sorry that's not enough money. Money refunded."
+                 elif ui == 'cappuccino' and user_amt > MENU["cappuccino"]["cost"]:
+                     change = round(gt - MENU["cappuccino"]["cost"], 2)
+                     m += MENU["cappuccino"]["cost"]
+                     return m, f"Here is ${change} in change."
+                 elif ui == 'cappuccino' and user_amt == MENU["cappuccino"]["cost"]:
+                     m += MENU["cappuccino"]["cost"]
+                     return m
+                 elif ui == 'cappuccino' and user_amt < MENU["cappuccino"]["cost"]:
+                     return m, "Sorry that's not enough money. Money refunded."
+            money += check_transaction(user_input, gt)[0]
+            print(check_transaction(user_input, gt)[1])
+
+            #TODO 5. Deduct resources used
+            if user_input == 'espresso':
+                resources['water'] -= MENU["espresso"]["ingredients"]["water"]
+                resources['coffee'] -= MENU["espresso"]["ingredients"]["coffee"]
+            elif user_input == 'latte':
+                resources['water'] -= MENU["latte"]["ingredients"]["water"]
+                resources['milk'] -= MENU["latte"]["ingredients"]["milk"]
+                resources['coffee'] -= MENU["latte"]["ingredients"]["coffee"]
+            elif user_input == 'cappuccino':
+                resources['water'] -= MENU["cappuccino"]["ingredients"]["water"]
+                resources['milk'] -= MENU["cappuccino"]["ingredients"]["milk"]
+                resources['coffee'] -= MENU["cappuccino"]["ingredients"]["coffee"]
+
+    elif user_input == 'off':
+        on_off = 'off'
+    else:
+        print("Invalid option selected.")
+        print("Please select correct coffee type, 'latte' or 'espresso' or 'cappuccino'.")
