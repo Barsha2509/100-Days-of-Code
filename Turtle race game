@@ -1,0 +1,48 @@
+import turtle
+from turtle import Turtle, Screen
+import random as rand
+
+race_on = False
+screen = Screen()
+screen.setup(width=500, height=500)
+background= "/Users/abhisheksinha/PycharmProjects/Day 19-Intermediate/pythonProject/track.png"
+screen.bgpic(background)
+user_input = screen.textinput(title="Make your bet", prompt="Which turtle will win the race? Enter a color: ")
+#print(user_input)
+colors = ["red", "orange", "yellow", "green", "blue", "purple"]
+names = ["Tim","Tom","Jenny","Jim","Rose","Pam"]
+turtles = []
+
+def turtle_maker(_,a,b,c):
+    name = Turtle(shape="turtle")
+    name.penup()
+    name.goto(a,b)
+    name.color(c)
+    turtles.append(name)
+
+
+x=-240
+y=330 
+for i,j in zip(names,colors):
+    turtle_maker(i,x,y,j)
+    y -= 133 #25
+
+
+if user_input:
+    race_on = True
+
+while race_on:
+    for t in turtles:
+        dist = rand.randint(0, 10)
+        t.forward(dist)
+
+        if t.xcor() > 222: #230:# once turtle reach end of screen which is 250 (1/2 of width) and turtle size is 40*40, so need to account for that (250-(40/2)=230)
+            race_on = False
+            winning_color = t.pencolor()
+            if winning_color == user_input:
+                print(f"You've won! The {winning_color} turtle is the winner.")
+            else:
+                print(f"You've lost.The {winning_color} turtle is the winner.")
+
+
+screen.exitonclick()
